@@ -1,8 +1,8 @@
 # Working files that are not part of the published site
 CLAUDE.md
 .claude/
-assets/
-code/
-video/
+/assets/
+/code/
+/video/
 *.pptx
 *.pdf
