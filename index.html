@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>P³-VLM</title>
+  <meta name="description" content="P³-VLM: A Point-based Alternative for Grounded 3D Vision-Language Models. NeurIPS 2026 Spotlight.">
+  <meta property="og:title" content="P³-VLM: A Point-based Alternative for Grounded 3D Vision-Language Models">
+  <meta property="og:description" content="Boxes give the answer away. Prompt a 3D VLM with a single point instead.">
+  <meta property="og:image" content="https://insait-institute.github.io/p3vlm_web/static/img/reveal_room.jpg">
+  <meta property="og:url" content="https://insait-institute.github.io/p3vlm_web/">
+  <meta name="theme-color" content="#F3F0E8">
+  <link rel="preload" href="static/fonts/Montserrat-Medium.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="stylesheet" href="static/css/style.css?v=23">
+</head>
+<body>
+
+<!-- ============================================================ HERO -->
+<header class="hero wrap">
+  <div class="venue-row">
+    <a href="https://neurips.cc/"><img src="static/img/logo_neurips.png" alt="NeurIPS" class="logo-neurips"></a>
+    <p class="venue"><span class="dot" aria-hidden="true"></span>NeurIPS 2026 <span class="venue-sep" aria-hidden="true"></span> Spotlight</p>
+  </div>
+  <h1>P³-VLM</h1>
+  <p class="subtitle">A Point-based Alternative for Grounded 3D Vision-Language Models</p>
+
+  <ul class="authors">
+    <li><img src="static/img/author_0.png" alt="" width="120" height="120"><a href="https://amhalacheva.github.io/">Anna-Maria Halacheva</a></li>
+    <li><img src="static/img/author_1.png" alt="" width="120" height="120"><a href="https://jannicozaech.github.io/">Jan-Nico Zaech</a></li>
+    <li><img src="static/img/author_2.png" alt="" width="120" height="120"><a href="https://insait.ai/sombit-dey/">Sombit Dey</a></li>
+    <li><img src="static/img/author_3.png" alt="" width="120" height="120"><a href="https://insait.ai/prof-luc-van-gool/">Luc Van Gool</a></li>
+    <li><img src="static/img/author_4.png" alt="" width="120" height="120"><a href="https://insait.ai/dr-danda-paudel/">Danda Paudel</a></li>
+  </ul>
+  <div class="affils">
+    <a href="https://insait.ai/"><img src="static/img/logo_insait.png" alt="INSAIT" class="logo-insait"></a>
+    <a href="https://www.uni-sofia.bg/"><img src="static/img/logo_su.png" alt="Sofia University St. Kliment Ohridski" class="logo-su"></a>
+    <p>INSAIT, Sofia University “St. Kliment Ohridski”</p>
+  </div>
+
+  <!-- TODO(links): paper (arXiv / OpenReview) and code URLs. -->
+  <nav class="buttons" aria-label="Resources">
+    <a class="btn" href="#" aria-disabled="true" title="Link coming soon">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2.75h8.5L19.25 7.5V21.25H6z"/><path d="M14.5 2.75V7.5h4.75M9 12h7M9 15.5h7"/></svg>Paper</a>
+    <a class="btn" href="#" aria-disabled="true" title="Link coming soon">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 7 3.5 12l5 5M15.5 7l5 5-5 5"/></svg>Code</a>
+    <a class="btn" href="#tldr">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6.5h16M4 12h16M4 17.5h10"/></svg>TL;DR</a>
+    <a class="btn" href="#video">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.75h13.5v12.5H3zM16.5 10l4.5-2.75v9.5L16.5 14"/></svg>Video</a>
+    <a class="btn" href="#bibtex">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4.5c-2 0-2.5 1-2.5 2.5v2.5c0 1.25-.75 2.5-2 2.5 1.25 0 2 1.25 2 2.5V17c0 1.5.5 2.5 2.5 2.5M16 4.5c2 0 2.5 1 2.5 2.5v2.5c0 1.25.75 2.5 2 2.5-1.25 0-2 1.25-2 2.5V17c0 1.5-.5 2.5-2.5 2.5"/></svg>BibTeX</a>
+  </nav>
+</header>
+
+<section class="wrap video-wrap" id="video" aria-label="Explainer video">
+  <!-- TODO(video): swap for the final hosting URL (e.g. YouTube) if the file should not live in the repo. -->
+  <div class="player">
+    <!-- #t=69 shows the end card as the cover frame; playback restarts from 0 on click. -->
+    <video src="static/video/p3vlm_video_v3.mp4#t=69" playsinline preload="metadata"
+           aria-label="72-second silent explainer video of P³-VLM"></video>
+    <button type="button" class="play" aria-label="Play the explainer video">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6.5v11l9-5.5z"/></svg><span>Watch the video · 1:12</span>
+    </button>
+  </div>
+</section>
+
+<!-- ============================================================ TL;DR -->
+<section class="wrap section tldr" id="tldr">
+  <div>
+    <p class="eyebrow">TL;DR</p>
+    <p class="lead">To learn grounded vision, 3D vision-language models are often given a box in the scene and asked to talk about the object inside it.
+      But the box’s shape and location <mark>give the answer away</mark>.</p>
+    <p class="lead lead-2">We analyze this semantic leakage, both in the text prompt and in the model architecture, and propose a
+      <mark>point-based alternative</mark>: query the model with a single 3D point. Existing 3D VLMs lose much of their accuracy under point prompts,
+      so we introduce P³-VLM, a 3D VLM designed specifically for them.</p>
+  </div>
+  <figure class="room room-reveal">
+    <img src="static/img/reveal_room.jpg" alt="A furnished room reconstructed as 3D Gaussian splats, with yellow query points on the door, a wall socket, the window and a painting" width="1600" height="1425">
+    <svg class="overlay" viewBox="0 0 1600 1425" preserveAspectRatio="none" aria-hidden="true"></svg>
+    <figcaption>One click per object. No size, no shape: the model has to look.</figcaption>
+  </figure>
+</section>
+
+<!-- ============================================================ QUIZ -->
+<section class="wrap section" id="leak">
+  <p class="eyebrow">Semantic leakage</p>
+  <h2>Boxes give the answer away.</h2>
+  <p class="sub">A box tells the model what the object is without a need to look. The leak shows up in two places:
+    in the <strong>text prompt</strong> the model gets, and in the <strong>architecture</strong> that processes it.</p>
+
+  <h3 class="leak-h"><span class="leak-n">1</span>Textual leakage</h3>
+  <p class="sub">A box’s dimensions, aspect ratio and volume are highly predictive of its class: a tall, narrow box standing on the floor
+    is probably a door. And because the room’s extents are usually known (coordinate normalization is frequent), the box also says
+    <em>where</em> the object sits: on the floor, high on a wall, in a corner.</p>
+  <p class="sub">Try it. Here are the room extents and four boxes. Can you tell what each one was?</p>
+
+  <div class="game quiz">
+    <figure class="room room-quiz">
+      <img src="static/img/quiz_room.jpg" alt="The same room, empty, with four translucent boxes where objects used to be" width="1600" height="1429">
+      <svg class="overlay" viewBox="0 0 1600 1429" aria-hidden="true"></svg>
+      <div class="tags" aria-hidden="true"></div>
+    </figure>
+
+    <div class="quiz-panel">
+      <p class="quiz-hint">Pick a name for each box.</p>
+      <ol class="guesses"></ol>
+      <div class="quiz-actions">
+        <button type="button" class="btn btn-quiet" data-act="reveal">Reveal</button>
+        <button type="button" class="btn btn-quiet" data-act="reset" hidden>Try again</button>
+      </div>
+      <p class="quiz-result" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <div class="leak-stats">
+    <div class="stat">
+      <p class="stat-num">36.4<span>%</span></p>
+      <p class="stat-label">of the guesses of a <strong>blind LLM</strong> (Qwen3-VL 4B, fine-tuned on box center, yaw and extent, with no visual encoder) were correct on Nr3D.</p>
+    </div>
+    <div class="stat">
+      <p class="stat-num">18.0<span>%</span></p>
+      <p class="stat-label">Tuning the same blind LLM on a <strong>point</strong> instead of a box reduces the shortcut.</p>
+    </div>
+  </div>
+
+  <h3 class="leak-h"><span class="leak-n">2</span>Architectural leakage</h3>
+  <p class="sub">The leak also comes through the "visual features", specifically in object-detector VLMs (OD-VLMs). A detector segments the scene,
+    and a 3D encoder turns each instance’s point cloud into tokens for the LLM. Does the 3D encoder add anything beyond the detector’s boxes?
+    We replace LEO’s visual features with a 2-layer MLP encoding of each object’s box center and extent, and this itself seems enough...</p>
+  <p class="sub">Try it. Below is everything the box encoder passes to the LLM: just boxes, no points, no colors. Caption the scene.</p>
+
+  <div class="game scene-game">
+    <figure class="scene">
+      <div class="mode-switch scene-switch" role="group" aria-label="Scene">
+        <button type="button" data-scene="bedroom" aria-pressed="true">Scene 1</button>
+        <button type="button" data-scene="kitchen" aria-pressed="false">Scene 2</button>
+      </div>
+      <svg class="scene-svg" role="img"></svg>
+    </figure>
+    <div class="game-panel">
+      <label class="quiz-hint" for="scene-caption">Your caption</label>
+      <textarea id="scene-caption" class="caption-input" rows="3" placeholder="e.g. A room with…"></textarea>
+      <div class="quiz-actions">
+        <button type="button" class="btn btn-quiet" data-act="reveal">Reveal</button>
+        <button type="button" class="btn btn-quiet" data-act="reset" hidden>Try again</button>
+      </div>
+      <div class="scene-answer" aria-live="polite" hidden>
+        <p class="m-kicker">Ground-truth caption</p>
+        <p class="scene-caption"></p>
+        <p class="quiz-result"></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="arch">
+    <div class="pipes">
+      <div class="pipe">
+        <p class="pipe-name">Full OD-VLM (LEO)</p>
+        <ol class="pipe-steps">
+          <li>Detector</li>
+          <li class="is-vis">Instance point clouds</li>
+          <li class="is-vis">3D encoder</li>
+          <li>LLM</li>
+        </ol>
+      </div>
+      <div class="pipe">
+        <p class="pipe-name">Box encoder + LLM</p>
+        <ol class="pipe-steps">
+          <li>Detector</li>
+          <li class="is-box">Box center + extent</li>
+          <li class="is-box">2-layer MLP</li>
+          <li>LLM</li>
+        </ol>
+      </div>
+      <p class="pipe-note">Box encodings alone get within 0.9 points of the full model. Its class predictions come mostly from the
+        <strong>geometric prior</strong>, not from what the 3D encoder sees.</p>
+    </div>
+    <div class="chart-card arch-chart">
+      <p class="metric">Nr3D · class accuracy (%)</p>
+      <div class="bars"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ DROP CHART -->
+<section class="wrap section" id="drop">
+  <p class="eyebrow">The problem</p>
+  <h2>Today’s 3D models aren’t ready for points.</h2>
+  <p class="sub">We mark one object in the room, with a box or just a point, and the model has to describe it.
+    Same models, only the prompt changes.</p>
+
+  <div class="chart-card drop" data-mode="box">
+    <div class="chart-head">
+      <p class="metric">Nr3D · class accuracy (%)</p>
+      <div class="mode-switch" role="group" aria-label="Prompt type">
+        <button type="button" data-mode="box" aria-pressed="true"><span class="ico-box" aria-hidden="true"></span>box prompt</button>
+        <button type="button" data-mode="point" aria-pressed="false"><span class="ico-point" aria-hidden="true"></span>point prompt</button>
+      </div>
+    </div>
+    <div class="bars"></div>
+  </div>
+</section>
+
+<!-- ============================================================ METHOD -->
+<section class="wrap section" id="method">
+  <p class="eyebrow">Method</p>
+  <h2>Built to answer from a single point.</h2>
+  <p class="sub">P³-VLM is detector-free and scene-centric. It works directly on a 3D Gaussian Splat of the room and feeds
+    three complementary pathways into Qwen3-VL-4B.</p>
+
+  <div class="method">
+    <div class="m-inputs">
+      <div class="m-node">
+        <div class="m-thumb">
+          <img src="static/img/reveal_room.jpg" alt="" width="1600" height="1425">
+          <span class="pin" style="left:33.3%;top:44.1%" aria-hidden="true"></span>
+        </div>
+        <p class="m-title">3D Gaussian Splat scene</p>
+        <p class="m-note">+ query point (x, y, z)</p>
+      </div>
+      <div class="m-node">
+        <p class="m-note">Question</p>
+        <p class="m-quote">“What is at this point?”</p>
+      </div>
+    </div>
+
+    <div class="m-arrow" aria-hidden="true"></div>
+
+    <ol class="m-paths">
+      <li class="m-path path-location">
+        <p class="m-kicker">Location</p>
+        <p class="m-title"><mark>look here</mark></p>
+        <p class="m-note">The voxel feature at the query point.</p>
+        <span class="tokens" aria-hidden="true"><i></i></span>
+      </li>
+      <li class="m-path path-task">
+        <p class="m-kicker">Task</p>
+        <p class="m-title">look for</p>
+        <p class="m-note">Scene tokens selected by the question.</p>
+        <span class="tokens" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+      </li>
+      <li class="m-path path-context">
+        <p class="m-kicker">Context</p>
+        <p class="m-title">look around</p>
+        <p class="m-note">8 global scene tokens.</p>
+        <span class="tokens" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+      </li>
+    </ol>
+
+    <div class="m-arrow" aria-hidden="true"></div>
+
+    <div class="m-out">
+      <div class="m-node m-llm"><p class="m-title">Qwen3-VL-4B</p><p class="m-note">LLM</p></div>
+      <p class="m-quote m-answer">“A white door next to the window.”</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ RESULTS -->
+<section class="wrap section" id="results">
+  <p class="eyebrow">Results</p>
+  <h2>Trained on points, P³-VLM sees better.</h2>
+  <p class="sub">Against box-based 3D models on the same benchmarks.</p>
+
+  <div class="legend" aria-hidden="true">
+    <span><i class="sw sw-base"></i>baselines (box)</span>
+    <span><i class="sw sw-box"></i>P³-VLM, box prompt</span>
+    <span><i class="sw sw-point"></i>P³-VLM, point prompt</span>
+  </div>
+
+  <div class="panels">
+    <div class="chart-card panel" data-panel="performance">
+      <h3>Performance</h3>
+      <p class="panel-sub">Nr3D grounded captioning</p>
+      <p class="metric">Class accuracy (%)</p>
+      <div class="bars"></div>
+    </div>
+    <div class="chart-card panel" data-panel="robustness">
+      <h3>Robustness</h3>
+      <p class="panel-sub">Sloppy boxes, off-centre points</p>
+      <p class="metric">Class accuracy (%)</p>
+      <div class="bars"></div>
+      <p class="panel-foot">Baselines get non-tight boxes; P³-VLM (point) gets points offset up to 0.9× the object’s extent.</p>
+    </div>
+    <div class="chart-card panel" data-panel="generalization">
+      <h3>Generalization</h3>
+      <p class="panel-sub">Object counting in unseen rooms (GaussianVLM-OOD)</p>
+      <p class="metric">Exact match (%)</p>
+      <div class="bars"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ BIBTEX -->
+<section class="wrap section" id="bibtex">
+  <p class="eyebrow">Citation</p>
+  <h2>BibTeX</h2>
+  <!-- TODO(bibtex): replace with the final entry. -->
+  <div class="bib">
+    <button type="button" class="copy" data-copy="#bib-src">Copy</button>
+    <pre id="bib-src"><code>@inproceedings{p3vlm2026,
+  title     = {P$^3$-VLM: A Point-based Alternative for Grounded 3D Vision-Language Models},
+  author    = {Halacheva, Anna-Maria and Zaech, Jan-Nico and Dey, Sombit and Van Gool, Luc and Paudel, Danda},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+  year      = {2026}
+}</code></pre>
+  </div>
+</section>
+
+<section class="wrap section ack" id="ack">
+  <h2>Acknowledgements</h2>
+  <p class="sub">This research was partially funded by the Ministry of Education and Science of Bulgaria (support for INSAIT,
+    part of the Bulgarian National Roadmap for Research Infrastructure).</p>
+</section>
+
+<footer class="wrap footer">
+  <p>© 2026 the authors.</p>
+</footer>
+
+<div class="tooltip" role="tooltip" hidden></div>
+<script src="static/js/main.js?v=23"></script>
+</body>
+</html>
