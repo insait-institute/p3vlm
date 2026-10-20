@@ -5,5 +5,5 @@ CLAUDE.md
 /code/
 /video/
 *.pptx
-*.pdf
+/*.pdf
 /figures/
